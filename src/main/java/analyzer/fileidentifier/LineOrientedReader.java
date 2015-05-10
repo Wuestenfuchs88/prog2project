@@ -19,24 +19,29 @@ public class LineOrientedReader implements ReaderLoader {
             System.err.println("File not found or format is unknown!");
         }
 
-        int numberOfVariables = lineOrientedScanner.nextInt();
+        int numberOfVariables = Integer.parseInt(lineOrientedScanner.nextLine());
 
         ArrayList<String> variableNames = new ArrayList<>();
-        for (int i = 0; i <= numberOfVariables; i++) variableNames.add(i, lineOrientedScanner.nextLine());
+        for (int i = 0; i < numberOfVariables; i++) variableNames.add(i, lineOrientedScanner.nextLine());
 
         String delimiter = lineOrientedScanner.nextLine();
 
         ArrayList<ArrayList<Double>> variableContent = new ArrayList<>();
-        for (int i = 0; i < numberOfVariables; i++) variableContent.add(new ArrayList<Double>());
-
-        //Hier noch die 2 ArrayLists mit den Messwerten füllen
+        for (int i = 0; i < numberOfVariables; i++) {
+            variableContent.add(new ArrayList<Double>(i));
+            String[] values = lineOrientedScanner.nextLine().split(delimiter);
+            int iterations = values.length;
+            for (int j = 0; j < iterations; j++) variableContent.get(i).add(j, Double.parseDouble(values[j]));
+        }
 
         //TEST
-        System.out.println(numberOfVariables);
-        System.out.println(variableNames);
-        System.out.println(delimiter);
-        System.out.println(variableContent);
+        System.out.println("Anzahl Variabeln: " + numberOfVariables);
+        System.out.println("Namen der Variabeln " + variableNames);
+        System.out.println("Trennzeichen: " + delimiter);
+        System.out.println("Inhalt Variable 1: " + variableContent.get(0));
+        System.out.println("Inhalt Variable 2: " + variableContent.get(1));
 
-        return new Data(numberOfVariables, variableNames);
+        lineOrientedScanner.close();
+        return new Data(numberOfVariables, variableNames, variableContent);
     }
 }
