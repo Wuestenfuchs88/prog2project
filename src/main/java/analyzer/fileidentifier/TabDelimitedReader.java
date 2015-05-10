@@ -1,4 +1,4 @@
-package analyzer.fileidentifier;
+package fileidentifier;
 
 import analyzer.datastore.Data;
 import java.io.File;
@@ -6,7 +6,8 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class TabDelimitedReader implements ReaderLoader {
+public class TabDelimitedReader implements ReaderLoader
+{
 
     @Override
     public Data loadData(String fileName) {

@@ -1,4 +1,4 @@
-package analyzer.fileidentifier;
+package fileidentifier;
 
 import analyzer.datastore.Data;
 import java.io.File;
@@ -6,10 +6,12 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class LineOrientedReader implements ReaderLoader {
+public class LineOrientedReader implements ReaderLoader
+{
 
     @Override
-    public Data loadData(String fileName) {
+    public Data loadData(String fileName)
+    {
 
         Scanner lineOrientedScanner = null;
 
