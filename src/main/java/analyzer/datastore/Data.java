@@ -2,54 +2,39 @@ package analyzer.datastore;
 
 import java.lang.Integer;
 import java.util.ArrayList;
+import java.util.List;
 
-public class Data
-{
+public class Data {
+
     private int numberOfVariables;
-    private ArrayList<String> variableNames;
-    private ArrayList<ArrayList<Double>> variableContent;
-    private String filename;
+    private List<Variable> variables;
+    private String fileName;
 
-    public Data(int numberOfVariables, ArrayList<String> variableNames, ArrayList<ArrayList<Double>> variableContent)
-    {
-        this.variableNames = variableNames;
+    public Data(int numberOfVariables, List<Variable> variables, String fileName) {
         this.numberOfVariables = numberOfVariables;
-        this.variableContent = variableContent;
-        this.filename = filename;
+        this.variables = variables;
+        this.fileName = fileName;
     }
 
-    //Get the numbers of variables
-    public Integer getNumberOfVariables()
-    {
+    public Integer getNumberOfVariables() {
         return numberOfVariables;
     }
 
-    // Get the names of the variables
-    public ArrayList<String> getVariableNames()
-    {
-        return variableNames;
+    public List<Variable> getVariableContent() {
+        return variables;
     }
 
-    //Get Content
-    public ArrayList<ArrayList<Double>> getVariableContent()
-    {
-        return variableContent;
+    public String getFilename() {
+        return fileName;
     }
 
-    /**public String getFilename()
-    {
-        return filename;
-    }*/
+    public ArrayList<Double> getSortedValues(int index) {
+        return variables.get(index).getSortedValues();
+    }
 
-
-
-
-       /** for (int i = 0; i < numberOfVariables; i++)
-        {
-            Variable variable = new Variable(variableNames.get(i));
-        }
-        */
-
+    public ArrayList<Double> getReverseSortedValues(int index) {
+        return variables.get(index).getReverseSortedValues();
+    }
 
 }
 

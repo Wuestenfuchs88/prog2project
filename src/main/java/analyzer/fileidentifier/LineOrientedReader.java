@@ -1,17 +1,17 @@
-package fileidentifier;
+package analyzer.fileidentifier;
 
 import analyzer.datastore.Data;
+import analyzer.datastore.Variable;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
-public class LineOrientedReader implements ReaderLoader
-{
+public class LineOrientedReader implements ReaderLoader {
 
     @Override
-    public Data loadData(String fileName)
-    {
+    public Data loadData(String fileName) {
 
         Scanner lineOrientedScanner = null;
 
@@ -23,27 +23,25 @@ public class LineOrientedReader implements ReaderLoader
 
         int numberOfVariables = Integer.parseInt(lineOrientedScanner.nextLine());
 
-        ArrayList<String> variableNames = new ArrayList<>();
-        for (int i = 0; i < numberOfVariables; i++) variableNames.add(i, lineOrientedScanner.nextLine());
+        List<Variable> variables = new ArrayList<>(numberOfVariables);
+
+        for (int i = 0; i < numberOfVariables; i++) {
+            String variableName = lineOrientedScanner.nextLine();
+            Variable variable = new Variable(variableName);
+            variables.add(variable);
+        }
 
         String delimiter = lineOrientedScanner.nextLine();
 
-        ArrayList<ArrayList<Double>> variableContent = new ArrayList<>();
         for (int i = 0; i < numberOfVariables; i++) {
-            variableContent.add(new ArrayList<Double>(i));
             String[] values = lineOrientedScanner.nextLine().split(delimiter);
-            int iterations = values.length;
-            for (int j = 0; j < iterations; j++) variableContent.get(i).add(j, Double.parseDouble(values[j]));
+            for (int j = 0; j < values.length; j++) variables.get(i).addValue(Double.parseDouble(values[j]));
         }
 
-        //TEST
-        System.out.println("Anzahl Variabeln: " + numberOfVariables);
-        System.out.println("Namen der Variabeln " + variableNames);
-        System.out.println("Trennzeichen: " + delimiter);
-        System.out.println("Inhalt Variable 1: " + variableContent.get(0));
-        System.out.println("Inhalt Variable 2: " + variableContent.get(1));
-
         lineOrientedScanner.close();
-        return new Data(numberOfVariables, variableNames, variableContent);
+
+        System.out.println("LineOrientedReader finished parsing file" + fileName);
+
+        return new Data(numberOfVariables, variables, fileName);
     }
 }
