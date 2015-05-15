@@ -4,8 +4,9 @@ import analyzer.datastore.Data;
 import analyzer.fileidentifier.LineOrientedReader;
 import analyzer.fileidentifier.ReaderLoader;
 import analyzer.fileidentifier.TabDelimitedReader;
-
-import javax.swing.JFileChooser;
+import analyzer.gui.MainFrame;
+import analyzer.gui.MainPanel;
+import javax.swing.*;
 import java.io.File;
 
 
@@ -36,10 +37,18 @@ public class Analyzer {
                 System.out.println("Open file dialog canceled");
                 break;
         }
+        //Frame + MainPanel
+        JFrame mainFrame = new MainFrame();
+        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mainFrame.setVisible(true);
+        MainPanel mainPanel = new MainPanel();
+        mainFrame.add(mainPanel);
+
+
 
 
         /* TESTAUSGABE  (gibt Fehler wenn der opendfiledialog gecanceld wird)  */
-        System.out.println("Number of Variables parsed: " + data.getNumberOfVariables());
+                System.out.println("Number of Variables parsed: " + data.getNumberOfVariables());
         System.out.println("Name of file read: " + data.getFilename());
         for (int i = 0; i < data.getNumberOfVariables(); i++) {
             System.out.println("Content Variable " + i + ": " + data.getVariableContent().get(i).getVariableContent());
