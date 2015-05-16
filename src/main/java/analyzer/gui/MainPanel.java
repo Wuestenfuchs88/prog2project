@@ -4,7 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import analyzer.datastore.Data;
 
 /**
@@ -50,11 +49,16 @@ public class MainPanel extends JPanel {
             public void actionPerformed(ActionEvent actionEvent) {
                 String fileName = data.getFilename();
                 if (fileName.endsWith(".lin.txt")) {
-                    //ScatterplotFrame scatterplotFrame = new ScatterplotFrame();
+                    JFrame scatterplotFrame = new ScatterplotFrame();
+                    scatterplotFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                    scatterplotFrame.setVisible(true);
+
                 } else if (fileName.endsWith(".tab.txt")) {
-                    //ScatterplotFrame scatterplotFrame = new ScatterplotFrame();
+                    JFrame scatterplotFrame = new ScatterplotFrame();
+                    scatterplotFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                    scatterplotFrame.setVisible(true);
                 } else {
-                    JOptionPane.showMessageDialog(null, "Incorrect File");
+                    System.err.println("Something went wrong!");
                 }
 
 
@@ -64,6 +68,14 @@ public class MainPanel extends JPanel {
         barChartButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+                String fileName = data.getFilename();
+                if (fileName.endsWith(".lin.txt")) {
+                    //BarChartFrame barChartFrame = new BarChartFrame();
+                } else if (fileName.endsWith(".tab.txt")) {
+                    ///BarChartFrame barChartFrame = new BarChartFrame();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Incorrect File");
+                }
 
             }
         });
