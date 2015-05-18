@@ -36,4 +36,12 @@ public class Variable {
         Collections.reverse(variableContent);
         return variableContent;
     }
+
+    public Double getMaxValue() {
+        return Collections.max(variableContent);
+    }
+
+    public Double getMinValue() {
+        return Collections.min(variableContent);
+    }
 }

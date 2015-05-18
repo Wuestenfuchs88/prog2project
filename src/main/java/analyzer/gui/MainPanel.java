@@ -90,28 +90,27 @@ public class MainPanel extends JPanel {
                         scatterPlotButton.setEnabled(true);
                         barChartButton.setEnabled(true);
                         setInfoLabelText("Great! Please choose visualization");
-                        barChartPanel = new BarChart(data, centerPanel.getSize());
-                        scatterPlotPanel = new ScatterPlot(data, centerPanel.getSize());
-                        centerPanel.add(scatterPlotPanel, BorderLayout.CENTER);
-                        centerPanel.add(barChartPanel, BorderLayout.CENTER);
+                        barChartPanel = new BarChart(data);
+                        scatterPlotPanel = new ScatterPlot(data);
+                        centerPanel.add(scatterPlotPanel);
+                        centerPanel.add(barChartPanel);
                         scatterPlotPanel.setVisible(false);
                         barChartPanel.setVisible(false);
 
-                    } else if (fileName.endsWith(".tab.txt")) {
+                    } else if (fileName.endsWith(".txt")) {
                         loader = new TabDelimitedReader();
                         data = loader.loadData(fileChooser.getSelectedFile());
                         fileChooser.setVisible(false);
                         scatterPlotButton.setEnabled(true);
                         barChartButton.setEnabled(true);
                         setInfoLabelText("Great! Please choose visualization");
-                        barChartPanel = new BarChart(data, centerPanel.getSize());
-                        scatterPlotPanel = new ScatterPlot(data, centerPanel.getSize());
-                        centerPanel.add(scatterPlotPanel, BorderLayout.CENTER);
-                        centerPanel.add(barChartPanel, BorderLayout.CENTER);
+                        barChartPanel = new BarChart(data);
+                        scatterPlotPanel = new ScatterPlot(data);
+                        centerPanel.add(scatterPlotPanel);
+                        centerPanel.add(barChartPanel);
                         scatterPlotPanel.setVisible(false);
                         barChartPanel.setVisible(false);
-
-                    } else setInfoLabelText("Filename must end with .lin.txt or .tab.txt.");
+                    } else setInfoLabelText("Filename must end with .lin.txt or .txt.");
                 } else if (klick.getActionCommand().equals(JFileChooser.CANCEL_SELECTION)) {
                     JOptionPane.showMessageDialog(null, "Open file dialog canceled.", "Analyzer will close now..", JOptionPane.WARNING_MESSAGE);
                     System.exit(0);

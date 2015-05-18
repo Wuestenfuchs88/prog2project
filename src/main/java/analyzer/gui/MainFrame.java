@@ -14,8 +14,8 @@ public class MainFrame extends JFrame {
         setTitle("Data Analyzer");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
-        MainPanel mainPanel = new MainPanel();
-        add(mainPanel);
+        add(new MainPanel());
+
 
     }
 }
