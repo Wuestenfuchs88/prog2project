@@ -2,7 +2,6 @@ package analyzer.fileidentifier;
 
 import analyzer.datastore.Data;
 import analyzer.datastore.Variable;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -12,12 +11,13 @@ import java.util.Scanner;
 public class TabDelimitedReader implements ReaderLoader {
 
     @Override
-    public Data loadData(String fileName) {
+    public Data loadData(File file) {
 
+        String fileName = file.getName();
         Scanner tabDelimitedScanner = null;
 
         try {
-            tabDelimitedScanner = new Scanner(new File(fileName));
+            tabDelimitedScanner = new Scanner(file);
         } catch (FileNotFoundException e) {
             System.err.println("File not found or format is unknown!");
         }
