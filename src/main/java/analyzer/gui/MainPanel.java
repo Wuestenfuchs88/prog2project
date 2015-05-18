@@ -25,6 +25,7 @@ public class MainPanel extends JPanel {
     public MainPanel() {
 
         setLayout(new BorderLayout());
+        setBackground(Color.WHITE);
 
         centerPanel = new Panel();
         Panel topPanel = new Panel();
@@ -32,6 +33,7 @@ public class MainPanel extends JPanel {
         Panel buttonsPanel = new Panel();
 
         topPanel.setLayout(new BorderLayout());
+        centerPanel.setLayout(new BorderLayout());
 
         labelPanel.setBackground(Color.LIGHT_GRAY);
         buttonsPanel.setBackground(Color.LIGHT_GRAY);
@@ -68,12 +70,12 @@ public class MainPanel extends JPanel {
 
         topPanel.add(labelPanel, BorderLayout.NORTH);
         topPanel.add(buttonsPanel, BorderLayout.SOUTH);
+
         add(topPanel, BorderLayout.NORTH);
         add(centerPanel, BorderLayout.CENTER);
 
-
         fileChooser = new JFileChooser();
-        centerPanel.add(fileChooser);
+        centerPanel.add(fileChooser, BorderLayout.CENTER);
         fileChooser.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent klick) {
                 ReaderLoader loader;
@@ -88,11 +90,11 @@ public class MainPanel extends JPanel {
                         scatterPlotButton.setEnabled(true);
                         barChartButton.setEnabled(true);
                         setInfoLabelText("Great! Please choose visualization");
-                        barChartPanel = new BarChart(data);
-                        scatterPlotPanel = new ScatterPlot(data);
-                        centerPanel.add(scatterPlotPanel).setSize(centerPanel.getSize());
+                        barChartPanel = new BarChart(data, centerPanel.getSize());
+                        scatterPlotPanel = new ScatterPlot(data, centerPanel.getSize());
+                        centerPanel.add(scatterPlotPanel, BorderLayout.CENTER);
+                        centerPanel.add(barChartPanel, BorderLayout.CENTER);
                         scatterPlotPanel.setVisible(false);
-                        centerPanel.add(barChartPanel).setSize(centerPanel.getSize());
                         barChartPanel.setVisible(false);
 
                     } else if (fileName.endsWith(".tab.txt")) {
@@ -102,11 +104,11 @@ public class MainPanel extends JPanel {
                         scatterPlotButton.setEnabled(true);
                         barChartButton.setEnabled(true);
                         setInfoLabelText("Great! Please choose visualization");
-                        barChartPanel = new BarChart(data);
-                        scatterPlotPanel = new ScatterPlot(data);
-                        centerPanel.add(scatterPlotPanel).setSize(centerPanel.getSize());
+                        barChartPanel = new BarChart(data, centerPanel.getSize());
+                        scatterPlotPanel = new ScatterPlot(data, centerPanel.getSize());
+                        centerPanel.add(scatterPlotPanel, BorderLayout.CENTER);
+                        centerPanel.add(barChartPanel, BorderLayout.CENTER);
                         scatterPlotPanel.setVisible(false);
-                        centerPanel.add(barChartPanel).setSize(centerPanel.getSize());
                         barChartPanel.setVisible(false);
 
                     } else setInfoLabelText("Filename must end with .lin.txt or .tab.txt.");

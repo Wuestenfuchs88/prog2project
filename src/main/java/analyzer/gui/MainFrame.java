@@ -16,5 +16,6 @@ public class MainFrame extends JFrame {
         setVisible(true);
         MainPanel mainPanel = new MainPanel();
         add(mainPanel);
+
     }
 }
