@@ -55,6 +55,7 @@ public class MainPanel extends JPanel {
                 barChartPanel.setVisible(false);
                 scatterPlotPanel.setVisible(true);
                 setInfoLabelText("showing scatter plot of " + data.getFilename() + "...");
+                System.out.println("klick...");
             }
         });
 
