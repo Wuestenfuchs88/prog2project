@@ -2,8 +2,6 @@ package analyzer.fileidentifier;
 
 import analyzer.datastore.Data;
 import analyzer.datastore.Variable;
-import analyzer.gui.MainPanel;
-import analyzer.gui.MainFrame;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -15,13 +13,13 @@ public class LineOrientedReader implements ReaderLoader {
 
 
     @Override
-    public Data loadData(File file) {
+    public Data loadData(File chosenFile) {
 
-        String fileName = file.getName();
+        String fileName = chosenFile.getName();
         Scanner lineOrientedScanner = null;
 
         try {
-            lineOrientedScanner = new Scanner(file);
+            lineOrientedScanner = new Scanner(chosenFile);
         } catch (FileNotFoundException e) {
             System.err.println("File not found or format is unknown!");
         }

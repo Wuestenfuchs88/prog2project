@@ -6,116 +6,236 @@ import analyzer.fileidentifier.ReaderLoader;
 import analyzer.fileidentifier.TabDelimitedReader;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 
 public class MainPanel extends JPanel {
 
-    private Panel centerPanel;
-    private JLabel infoLabel;
-    private JButton scatterPlotButton;
-    private JButton barChartButton;
-    private JFileChooser fileChooser;
+    private final JLabel infoLabel;
+    private Color color = Color.ORANGE;
     private Data data;
-    private ScatterPlot scatterPlotPanel;
-    private BarChart barChartPanel;
 
     public MainPanel() {
 
         setLayout(new BorderLayout());
-        setBackground(Color.WHITE);
 
-        centerPanel = new Panel();
-        Panel topPanel = new Panel();
-        Panel labelPanel = new Panel();
-        Panel buttonsPanel = new Panel();
+        //Top
 
-        topPanel.setLayout(new BorderLayout());
-        centerPanel.setLayout(new BorderLayout());
-
-        labelPanel.setBackground(Color.LIGHT_GRAY);
-        buttonsPanel.setBackground(Color.LIGHT_GRAY);
+        JPanel topPanel = new JPanel(new BorderLayout());
+        topPanel.setBackground(Color.LIGHT_GRAY);
 
         String infoLabelText = "Welcome! Please choose a file to analyze";
         infoLabel = new JLabel(infoLabelText);
-        labelPanel.add(infoLabel);
+        infoLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
-        scatterPlotButton = new JButton("ScatterPlot");
-        barChartButton = new JButton("Bar Chart");
-        scatterPlotButton.setEnabled(false);
-        barChartButton.setEnabled(false);
-        buttonsPanel.add(scatterPlotButton);
-        buttonsPanel.add(barChartButton);
+        JPanel graphOptionsPanelHolder = new JPanel(new GridLayout());
 
-        scatterPlotButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                barChartPanel.setVisible(false);
-                scatterPlotPanel.setVisible(true);
-                setInfoLabelText("showing scatter plot of " + data.getFilename() + "...");
-                System.out.println("klick...");
-            }
-        });
+        JPanel scatterPlotOptionsPanel = new JPanel(new GridLayout(1, 3));
+        scatterPlotOptionsPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.DARK_GRAY), "Scatterplot"));
+        scatterPlotOptionsPanel.setBackground(Color.LIGHT_GRAY);
 
-        barChartButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                scatterPlotPanel.setVisible(false);
-                barChartPanel.setVisible(true);
-                setInfoLabelText("showing bar chart of " + data.getFilename() + "...");
-            }
-        });
+        JSlider pointSize = new JSlider(JSlider.HORIZONTAL,
+                0, 30, 5);
+
+        pointSize.setMajorTickSpacing(10);
+        pointSize.setMinorTickSpacing(1);
+        pointSize.setPaintTicks(true);
+        pointSize.setPaintLabels(true);
+        pointSize.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY), "Set pointsize manually"));
+
+        JCheckBox pointSizeFromVariable = new JCheckBox();
+
+        JComboBox dropdown = new JComboBox();
+/*        for (int i = 0; i < data.getNumberOfVariables(); i++) {
+            dropdown.addItem(data.getDataContent().get(i).getVariableName());
+        }*/
+        dropdown.addItem("Platzhalter");
+
+        JPanel pointSizePanel = new JPanel(new GridLayout());
+        pointSizePanel.setBackground(Color.LIGHT_GRAY);
+        pointSizePanel.setBorder(BorderFactory.createTitledBorder((BorderFactory.createLineBorder(Color.LIGHT_GRAY)), "Set Point Size from Variable"));
+        pointSizePanel.add(dropdown);
+        pointSizePanel.add(pointSizeFromVariable);
+
+        JRadioButton orange = new JRadioButton("Orange");
+        orange.setSelected(true);
+        JRadioButton red = new JRadioButton("Red");
+        JRadioButton gray = new JRadioButton("Gray");
+        JRadioButton green = new JRadioButton("Green");
+        JRadioButton white = new JRadioButton("White");
+        JRadioButton blue = new JRadioButton("Blue");
+
+        ButtonGroup buttonGroup = new ButtonGroup();
+        buttonGroup.add(orange);
+        buttonGroup.add(red);
+        buttonGroup.add(gray);
+        buttonGroup.add(green);
+        buttonGroup.add(white);
+        buttonGroup.add(blue);
+
+        JPanel radioPanel = new JPanel(new GridLayout(3, 2));
+        radioPanel.add(orange);
+        radioPanel.add(red);
+        radioPanel.add(gray);
+        radioPanel.add(green);
+        radioPanel.add(white);
+        radioPanel.add(blue);
+
+        radioPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.DARK_GRAY), "Color"));
+        radioPanel.setBackground(Color.LIGHT_GRAY);
 
 
-        topPanel.add(labelPanel, BorderLayout.NORTH);
-        topPanel.add(buttonsPanel, BorderLayout.SOUTH);
+        scatterPlotOptionsPanel.add(pointSizePanel);
+        scatterPlotOptionsPanel.add(pointSize);
+        scatterPlotOptionsPanel.add(radioPanel);
 
-        add(topPanel, BorderLayout.NORTH);
-        add(centerPanel, BorderLayout.CENTER);
 
-        fileChooser = new JFileChooser();
+        JPanel histogramOptionsPanel = new JPanel(new GridLayout(2, 2));
+        histogramOptionsPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.DARK_GRAY), "Histogram"));
+        histogramOptionsPanel.setBackground(Color.LIGHT_GRAY);
+
+        JLabel histoLabel = new JLabel("Choose variable blablabla");
+        JComboBox variableSelect = new JComboBox();
+/*        for (int i = 0; i < data.getNumberOfVariables(); i++) {
+            variableSelect.addItem(data.getDataContent().get(i).getVariableName());
+
+        }*/
+        variableSelect.addItem("Variable X");
+        variableSelect.addItem("Variable Y");
+        variableSelect.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY), "Left")); //setTitlePosition(TitledBorder.CENTER) ??
+
+
+        JComboBox variableTwoSelect = new JComboBox();
+/*        for (int i = 0; i < data.getNumberOfVariables(); i++) {
+            variableSelect.addItem(data.getDataContent().get(i).getVariableName());
+
+        }*/
+        variableTwoSelect.addItem("Variable XYZ");
+        variableTwoSelect.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY), "Right")); //setTitlePosition(TitledBorder.CENTER) ??
+
+        histogramOptionsPanel.add(histoLabel);
+        histogramOptionsPanel.add(new JLabel());
+        histogramOptionsPanel.add(variableSelect);
+        histogramOptionsPanel.add(variableTwoSelect);
+
+
+        topPanel.add(infoLabel, BorderLayout.NORTH);
+        graphOptionsPanelHolder.add(scatterPlotOptionsPanel);
+        graphOptionsPanelHolder.add(histogramOptionsPanel);
+        topPanel.add(graphOptionsPanelHolder, BorderLayout.CENTER);
+
+        //Center
+
+        final JPanel centerPanel = new JPanel(new BorderLayout());
+
+        final JSplitPane firstSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+        final JSplitPane secondSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+        firstSplit.setBottomComponent(secondSplit);
+        firstSplit.setResizeWeight(0.5);
+        secondSplit.setResizeWeight(0.5);
+
+
+        final JFileChooser fileChooser = new JFileChooser();
         centerPanel.add(fileChooser, BorderLayout.CENTER);
         fileChooser.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent klick) {
                 ReaderLoader loader;
-                String fileName;
                 if (klick.getActionCommand().equals(JFileChooser.APPROVE_SELECTION)) {
-                    File chosenFile = fileChooser.getSelectedFile();
-                    fileName = chosenFile.getName();
-                    if (fileName.endsWith(".lin.txt")) {
+                    if (fileChooser.getSelectedFile().getName().endsWith(".lin.txt")) {
                         loader = new LineOrientedReader();
                         data = loader.loadData(fileChooser.getSelectedFile());
-                        fileChooser.setVisible(false);
-                        scatterPlotButton.setEnabled(true);
-                        barChartButton.setEnabled(true);
-                        setInfoLabelText("Great! Please choose visualization");
-                        barChartPanel = new BarChart(data);
-                        scatterPlotPanel = new ScatterPlot(data);
-                        centerPanel.add(scatterPlotPanel);
-                        centerPanel.add(barChartPanel);
-                        scatterPlotPanel.setVisible(false);
-                        barChartPanel.setVisible(false);
-
-                    } else if (fileName.endsWith(".txt")) {
+                        setInfoLabelText("showing " + data.getFilename() + "...");
+                        firstSplit.setTopComponent(new ScatterPlot(data));
+                        secondSplit.setLeftComponent(new Histogram(data));
+                        secondSplit.setRightComponent(new Histogram(data));
+                        centerPanel.remove(fileChooser);
+                        centerPanel.add(firstSplit);
+                    } else if (fileChooser.getSelectedFile().getName().endsWith(".txt")) {
                         loader = new TabDelimitedReader();
                         data = loader.loadData(fileChooser.getSelectedFile());
-                        fileChooser.setVisible(false);
-                        scatterPlotButton.setEnabled(true);
-                        barChartButton.setEnabled(true);
-                        setInfoLabelText("Great! Please choose visualization");
-                        barChartPanel = new BarChart(data);
-                        scatterPlotPanel = new ScatterPlot(data);
-                        centerPanel.add(scatterPlotPanel);
-                        centerPanel.add(barChartPanel);
-                        scatterPlotPanel.setVisible(false);
-                        barChartPanel.setVisible(false);
-                    } else setInfoLabelText("Filename must end with .lin.txt or .txt.");
+                        setInfoLabelText("showing " + data.getFilename() + "...");
+                        firstSplit.setTopComponent(new ScatterPlot(data));
+                        secondSplit.setLeftComponent(new Histogram(data));
+                        secondSplit.setRightComponent(new Histogram(data));
+                        centerPanel.remove(fileChooser);
+                        centerPanel.add(firstSplit);
+
+                    } else {
+                        setInfoLabelText("Filename must end with .lin.txt or .txt.");
+                    }
+
                 } else if (klick.getActionCommand().equals(JFileChooser.CANCEL_SELECTION)) {
                     JOptionPane.showMessageDialog(null, "Open file dialog canceled.", "Analyzer will close now..", JOptionPane.WARNING_MESSAGE);
                     System.exit(0);
                 }
+            }
+        });
+
+
+        add(topPanel, BorderLayout.NORTH);
+        add(centerPanel, BorderLayout.CENTER);
+
+
+        //ActionListeners
+
+
+        pointSize.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                //set pointsize
+            }
+        });
+
+        blue.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                color = Color.BLUE;
+                repaint();
+            }
+        });
+        red.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                color = Color.RED;
+                repaint();
+            }
+        });
+        gray.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                color = Color.LIGHT_GRAY;
+                repaint();
+            }
+        });
+        green.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                color = Color.GREEN;
+                repaint();
+            }
+        });
+        white.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                color = Color.WHITE;
+                repaint();
+            }
+        });
+        orange.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                color = Color.ORANGE;
+                repaint();
+            }
+        });
+
+        dropdown.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //machwas
             }
         });
 
@@ -124,7 +244,7 @@ public class MainPanel extends JPanel {
     public void setInfoLabelText(String text) {
         this.infoLabel.setText(text);
     }
-
+    
 }
 
 

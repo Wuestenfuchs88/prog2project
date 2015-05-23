@@ -5,8 +5,8 @@ import java.util.Collections;
 
 public class Variable {
 
-    private String variableName;
-    private ArrayList<Double> variableContent;
+    private final String variableName;
+    private final ArrayList<Double> variableContent;
 
     public Variable(String variableName) {
 

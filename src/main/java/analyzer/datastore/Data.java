@@ -1,7 +1,5 @@
 package analyzer.datastore;
 
-import java.lang.Integer;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Data {
@@ -20,7 +18,7 @@ public class Data {
         return numberOfVariables;
     }
 
-    public List<Variable> getVariableContent() {
+    public List<Variable> getDataContent() {
         return variables;
     }
 
@@ -28,13 +26,15 @@ public class Data {
         return fileName;
     }
 
+/*  to delete
+
     public ArrayList<Double> getSortedValues(int index) {
         return variables.get(index).getSortedValues();
     }
 
     public ArrayList<Double> getReverseSortedValues(int index) {
         return variables.get(index).getReverseSortedValues();
-    }
+    }*/
 
 }
 
