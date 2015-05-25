@@ -23,7 +23,7 @@ public class Data {
     }
 
     public String getFilename() {
-        return fileName;
+        return this.fileName;
     }
 
 /*  to delete
