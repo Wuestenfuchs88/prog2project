@@ -44,4 +44,34 @@ public class Variable {
     public Double getMinValue() {
         return Collections.min(variableContent);
     }
+
+    public Double getSum() {
+        double sum = 0;
+        for (Double d : variableContent)
+            sum += d;
+        return sum;
+    }
+
+    public Double getMean() {
+        double sum = 0;
+        for (Double d : variableContent)
+            sum += d;
+        return sum / variableContent.size();
+    }
+
+    public double getVariance() {
+        double sum = 0;
+        for (Double d : variableContent)
+            sum += Math.pow((d - getMean()), 2);
+        return sum / (variableContent.size());
+    }
+
+    public double getSdtDev() {
+        return Math.sqrt(getVariance());
+    }
+
+    public double getRange() {
+        return getMaxValue() - getMinValue();
+    }
+
 }

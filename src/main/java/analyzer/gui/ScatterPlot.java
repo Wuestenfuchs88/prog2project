@@ -12,22 +12,10 @@ public class ScatterPlot extends JPanel {
     public ScatterPlot(Data data) {
 
         this.data = data;
+        setBackground(Color.WHITE);
 
-        setLayout(new BorderLayout());
-        setBackground(Color.GREEN);
-
-        Panel optionsPanel = new Panel();
-        optionsPanel.setBackground(Color.LIGHT_GRAY);
-        add(optionsPanel, BorderLayout.NORTH);
-
-
-        JLabel variable1 = new JLabel("Variable 1: " + data.getVariableContent().get(0).getVariableName());
-        JLabel variable2 = new JLabel("Variable 2: " + data.getVariableContent().get(1).getVariableName());
-        JButton testbutton = new JButton("halloscatter!");
-
-        optionsPanel.add(variable1);
-        optionsPanel.add(variable2);
-        optionsPanel.add(testbutton);
+        JLabel placeholder = new JLabel(data.getFilename());
+        add(placeholder);
 
     }
 }

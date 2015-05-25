@@ -149,8 +149,8 @@ public class MainPanel extends JPanel {
                         data = loader.loadData(fileChooser.getSelectedFile());
                         setInfoLabelText("showing " + data.getFilename() + "...");
                         firstSplit.setTopComponent(new ScatterPlot(data));
-                        secondSplit.setLeftComponent(new Histogram(data));
-                        secondSplit.setRightComponent(new Histogram(data));
+                        secondSplit.setLeftComponent(new Histogram(data, 0));
+                        secondSplit.setRightComponent(new Histogram(data, 1));
                         centerPanel.remove(fileChooser);
                         centerPanel.add(firstSplit);
                     } else if (fileChooser.getSelectedFile().getName().endsWith(".txt")) {
@@ -158,8 +158,8 @@ public class MainPanel extends JPanel {
                         data = loader.loadData(fileChooser.getSelectedFile());
                         setInfoLabelText("showing " + data.getFilename() + "...");
                         firstSplit.setTopComponent(new ScatterPlot(data));
-                        secondSplit.setLeftComponent(new Histogram(data));
-                        secondSplit.setRightComponent(new Histogram(data));
+                        secondSplit.setLeftComponent(new Histogram(data, 0));
+                        secondSplit.setRightComponent(new Histogram(data, 1));
                         centerPanel.remove(fileChooser);
                         centerPanel.add(firstSplit);
 
@@ -244,7 +244,7 @@ public class MainPanel extends JPanel {
     public void setInfoLabelText(String text) {
         this.infoLabel.setText(text);
     }
-    
+
 }
 
 
