@@ -52,6 +52,15 @@ public class Variable {
         return sum;
     }
 
+    public Double getSumIncNeg() {
+        double sum = 0;
+        for (Double d : variableContent) {
+            if (d < 0) sum += Math.abs(d);
+            sum += d;
+        }
+        return sum;
+    }
+
     public Double getMean() {
         double sum = 0;
         for (Double d : variableContent)
