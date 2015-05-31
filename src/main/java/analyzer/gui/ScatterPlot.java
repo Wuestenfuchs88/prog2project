@@ -3,7 +3,6 @@ package analyzer.gui;
 import analyzer.datastore.Data;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
@@ -25,7 +24,7 @@ public class ScatterPlot extends JPanel {
     private double yValue;
     private double xCoordinate;
     private double yCoordinate;
-    private final int OFFSET;
+
 
 
 
@@ -33,20 +32,19 @@ public class ScatterPlot extends JPanel {
     public ScatterPlot(Data data) {
 
         this.data = data;
-        this.OFFSET = 80;
         setBackground(Color.WHITE);
         setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), data.getDataContent().get(0).getVariableName()));
-        this.width = getWidth();
+        /*this.width = getWidth();
         this.height = getHeight();
         this.xAxis = data.getDataContent().get(0).getMaxValue();
         this.yAxis = data.getDataContent().get(1).getMaxValue();
-        this.zeroXAxis = getInsets().left;
-        this.zeroYAxis = getInsets().top;
+        this.zeroXAxis = getHeight() - getInsets().bottom;
+        this.zeroYAxis = getHeight() - getInsets().bottom;
         this.xCoordinates = new ArrayList<>();
-        this.yCoordinates = new ArrayList<>();
+        this.yCoordinates = new ArrayList<>();*/
 
 
-        for (int i = 0; i < data.getDataContent().get(0).getVariableContent().size(); i++) {
+        /*for (int i = 0; i < data.getDataContent().get(0).getVariableContent().size(); i++) {
 
             this.xValue = data.getDataContent().get(0).getVariableContent().get(i);
             xCoordinates.add(i, xValue);
@@ -56,43 +54,46 @@ public class ScatterPlot extends JPanel {
             this.yValue = data.getDataContent().get(1).getVariableContent().get(i);
             yCoordinates.add(i, yValue);
 
-        }
+        }*/
 
     }
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        double xSize = 10;
-        double ySize = 10;
+        int xSize = 10;
+        int ySize = 10;
+        final int OFFSETY = 260;
+        final int OFFSETX = 590;
 
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        //AffineTransform transform = new AffineTransform();
-        //transform.setToRotation(Math.PI / 2);
-        //g2.setTransform(transform);
-        Line2D xLine = new Line2D.Double(zeroXAxis, zeroYAxis, xAxis, zeroYAxis);
-        g2.draw(xLine);
-        Line2D yLine = new Line2D.Double(zeroXAxis, zeroYAxis, zeroXAxis, yAxis);
-        g2.draw(yLine);
-        g2.setColor(Color.BLACK);
-        //g2.setStroke(new java.awt.BasicStroke(6, BasicStroke.JOIN_ROUND, BasicStroke.CAP_ROUND, 1.0f, new float[]{1}, 0.0f));
+        g2.setColor(Color.BLUE);
 
+        for (int i = 0; i < data.getDataContent().get(0).getVariableContent().size(); i++) {
+            g2.fillOval(((int) ((((data.getDataContent().get(0).getVariableContent().get(i) -
+                    data.getDataContent().get(0).getMinValue()) / data.getDataContent().get(0).getRange()) * OFFSETY) + (OFFSETX / 2)))
+                    , ((int) (OFFSETY - (((data.getDataContent().get(1).getVariableContent().get(i) - data.getDataContent().get(1).getMinValue())
+                    / data.getDataContent().get(1).getRange()) * OFFSETY) + (OFFSETY / 4)))
+                    , xSize, ySize);
 
-        for (int i = 0; i < xCoordinates.size(); i++) {
-            Ellipse2D ellipse = new Ellipse2D.Double(getxCoordinates(i), getyCoordinates(i), xSize, ySize);
-            g2.fill(ellipse);
-            g2.draw(ellipse);
-            //int x = (int) (value / data.getDataContent().get(index).getMaxValue());
-            //int y = (int) (value / data.getDataContent().get(index).getMaxValue());
-            g2.setColor(Color.blue);
+            System.out.println(getWidth());
+
+        }
+
+        for (int j = 0; j < data.getDataContent().get(0).getVariableContent().size() - 1; j++) {
+            g2.drawLine(((int) ((((data.getDataContent().get(0).getVariableContent().get(j) -
+                            data.getDataContent().get(0).getMinValue()) / data.getDataContent().get(0).getRange()) * OFFSETY) + (OFFSETX / 2))),
+                    ((int) (OFFSETY - ((((data.getDataContent().get(1).getVariableContent().get(j) - data.getDataContent().get(1).getMinValue())
+                            / data.getDataContent().get(1).getRange()) * OFFSETY) + (OFFSETY / 4)))),
+                    ((int) ((((data.getDataContent().get(0).getVariableContent().get(j + 1)
+                            - data.getDataContent().get(0).getMinValue()) / data.getDataContent().get(0).getRange()) * OFFSETY) + (OFFSETX / 2))),
+                    ((int) ((((data.getDataContent().get(1).getVariableContent().get(j + 1) - data.getDataContent().get(1).getMinValue())
+                            / data.getDataContent().get(1).getRange()) * OFFSETY) + (OFFSETY / 4))));
+
         }
 
 
-
-
-    }
-
-    public double getxCoordinates(int i) {
+    /*public double getxCoordinates(int i) {
         {
             this.xCoordinate = xCoordinates.get(i);
 
@@ -103,8 +104,10 @@ public class ScatterPlot extends JPanel {
 
     public double getyCoordinates(int i) {
         this.yCoordinate = yCoordinates.get(i);
+        yCoordinate = getHeight() - yCoordinate;
         return yCoordinate;
+    }*/
+        //public void setColor ()
+
     }
-
-
 }
