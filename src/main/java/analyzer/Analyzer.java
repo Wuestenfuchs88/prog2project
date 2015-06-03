@@ -10,7 +10,7 @@ public class Analyzer {
 
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                new MainFrame();
+                new MainFrame().setVisible(true);
             }
         });
     }

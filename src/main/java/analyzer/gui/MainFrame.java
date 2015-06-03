@@ -13,7 +13,6 @@ public class MainFrame extends JFrame {
         setLocationRelativeTo(null);
         setTitle("Data Analyzer");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setVisible(true);
         add(new MainPanel());
 
 

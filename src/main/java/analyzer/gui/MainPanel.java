@@ -8,6 +8,7 @@ import analyzer.fileidentifier.TabDelimitedReader;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,7 +20,7 @@ public class MainPanel extends JPanel {
     private Data data;
     private JComboBox variableTwoSelect;
     private JComboBox variableSelect;
-    private JComboBox ScaleDropdown;
+    private JComboBox scaleDropdown;
     private int leftIndex = 0, rightIndex = 1;
 
     public MainPanel() {
@@ -38,55 +39,38 @@ public class MainPanel extends JPanel {
 
 
         final JFileChooser fileChooser = new JFileChooser();
+        FileNameExtensionFilter filter = new FileNameExtensionFilter(".txt & .lin.txt Files", "lin.txt", "txt");
+        fileChooser.setFileFilter(filter);
+
         centerPanel.add(fileChooser, BorderLayout.CENTER);
         fileChooser.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent klick) {
-                ReaderLoader loader;
+                ReaderLoader loader = null;
                 if (klick.getActionCommand().equals(JFileChooser.APPROVE_SELECTION)) {
-                    if (fileChooser.getSelectedFile().getName().endsWith(".lin.txt")) {
-                        loader = new LineOrientedReader();
-                        //SameCode
-                        data = loader.loadData(fileChooser.getSelectedFile());
-                        setInfoLabelText("showing " + data.getFilename() + "...");
-                        for (int i = 0; i < data.getNumberOfVariables(); i++) {
-                            variableSelect.addItem(data.getDataContent().get(i).getVariableName());
-                            variableTwoSelect.addItem(data.getDataContent().get(i).getVariableName());
-                            if (i >= 3) {
-                                ScaleDropdown.addItem(data.getDataContent().get(i).getVariableName());
-                            }
-                        }
-                        variableTwoSelect.setSelectedIndex(1);
-                        firstSplit.setTopComponent(new ScatterPlot(data));
-                        secondSplit.setLeftComponent(new Histogram(data, leftIndex));
-                        secondSplit.setRightComponent(new Histogram(data, rightIndex));
-                        centerPanel.remove(fileChooser);
-                        centerPanel.add(firstSplit);
-                        variableSelect.setEnabled(true);
-                        variableTwoSelect.setEnabled(true);
-                    } else if (fileChooser.getSelectedFile().getName().endsWith(".txt")) {
+                    if (fileChooser.getSelectedFile().getName().endsWith(".lin.txt")) loader = new LineOrientedReader();
+                    else if (fileChooser.getSelectedFile().getName().endsWith(".txt"))
                         loader = new TabDelimitedReader();
-                        //SameCode
-                        data = loader.loadData(fileChooser.getSelectedFile());
-                        setInfoLabelText("showing " + data.getFilename() + "...");
-                        for (int i = 0; i < data.getNumberOfVariables(); i++) {
-                            variableSelect.addItem(data.getDataContent().get(i).getVariableName());
-                            variableTwoSelect.addItem(data.getDataContent().get(i).getVariableName());
-                            if (i >= 3) {
-                                ScaleDropdown.addItem(data.getDataContent().get(i).getVariableName());
-                            }
-                        }
-                        variableTwoSelect.setSelectedIndex(1);
-                        firstSplit.setTopComponent(new ScatterPlot(data));
-                        secondSplit.setLeftComponent(new Histogram(data, leftIndex));
-                        secondSplit.setRightComponent(new Histogram(data, rightIndex));
-                        centerPanel.remove(fileChooser);
-                        centerPanel.add(firstSplit);
-                        variableSelect.setEnabled(true);
-                        variableTwoSelect.setEnabled(true);
-                    } else {
-                        setInfoLabelText("Filename must end with .lin.txt or .txt.");
-                    }
 
+                    data = loader.loadData(fileChooser.getSelectedFile());
+                    setInfoLabelText("showing " + data.getFilename() + "...");
+                    for (int i = 0; i < data.getNumberOfVariables(); i++) {
+                        variableSelect.addItem(data.getDataContent().get(i).getVariableName());
+                        variableTwoSelect.addItem(data.getDataContent().get(i).getVariableName());
+                        if (i >= 3) {
+                            scaleDropdown.addItem(data.getDataContent().get(i).getVariableName());
+                            scaleDropdown.setEnabled(true);
+                        }
+                    }
+                    variableTwoSelect.setSelectedIndex(1);
+                    firstSplit.setTopComponent(new ScatterPlot(data));
+                    HistogramData leftHistogram = new HistogramData(data, leftIndex);
+                    HistogramData rightHistogram = new HistogramData(data, rightIndex);
+                    secondSplit.setLeftComponent(new Histogram(leftHistogram));
+                    secondSplit.setRightComponent(new Histogram(rightHistogram));
+                    centerPanel.remove(fileChooser);
+                    centerPanel.add(firstSplit);
+                    variableSelect.setEnabled(true);
+                    variableTwoSelect.setEnabled(true);
                 } else if (klick.getActionCommand().equals(JFileChooser.CANCEL_SELECTION)) {
                     JOptionPane.showMessageDialog(null, "Open file dialog canceled.", "Analyzer will close now..", JOptionPane.WARNING_MESSAGE);
                     System.exit(0);
@@ -120,12 +104,13 @@ public class MainPanel extends JPanel {
 
         JCheckBox pointSizeFromVariable = new JCheckBox();
 
-        ScaleDropdown = new JComboBox();
+        scaleDropdown = new JComboBox();
+        scaleDropdown.setEnabled(false);
 
         JPanel pointSizePanel = new JPanel(new GridLayout());
         pointSizePanel.setBackground(Color.LIGHT_GRAY);
         pointSizePanel.setBorder(BorderFactory.createTitledBorder((BorderFactory.createLineBorder(Color.LIGHT_GRAY)), "Set Point Size from Variable"));
-        pointSizePanel.add(ScaleDropdown);
+        pointSizePanel.add(scaleDropdown);
         pointSizePanel.add(pointSizeFromVariable);
 
         JRadioButton orange = new JRadioButton("Orange");
@@ -204,7 +189,7 @@ public class MainPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 color = Color.BLUE;
-                repaint();
+
             }
         });
         red.addActionListener(new ActionListener() {
@@ -242,7 +227,7 @@ public class MainPanel extends JPanel {
                 repaint();
             }
         });
-        ScaleDropdown.addActionListener(new ActionListener() {
+        scaleDropdown.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //machwas
@@ -253,7 +238,7 @@ public class MainPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 leftIndex = variableSelect.getSelectedIndex();
-                secondSplit.setLeftComponent(new Histogram(data, leftIndex));
+                //             secondSplit.setLeftComponent(new Histogram(data, leftIndex));
             }
         });
 
@@ -261,7 +246,7 @@ public class MainPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 rightIndex = variableTwoSelect.getSelectedIndex();
-                secondSplit.setRightComponent(new Histogram(data, rightIndex));
+                //            secondSplit.setRightComponent(new Histogram(data, rightIndex));
             }
         });
 
