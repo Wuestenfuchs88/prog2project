@@ -25,16 +25,5 @@ public class Data {
     public String getFilename() {
         return this.fileName;
     }
-
-/*  to delete
-
-    public ArrayList<Double> getSortedValues(int index) {
-        return variables.get(index).getSortedValues();
-    }
-
-    public ArrayList<Double> getReverseSortedValues(int index) {
-        return variables.get(index).getReverseSortedValues();
-    }*/
-
 }
 

@@ -1,76 +1,73 @@
 package analyzer.gui;
 
 
-import analyzer.datastore.Data;
+import analyzer.datastore.Variable;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class HistogramData {
 
-    private final Data data;
-    private final int index;
-    private final ArrayList<Integer> bins;
+    private final ArrayList<AtomicInteger> bins;
     private final int numberOfBins;
+    private final int maxValue;
+    private final Variable variable;
 
 
-    public HistogramData(Data data, int index) {
-
-        this.index = index;
-        this.data = data;
+    public HistogramData(Variable variable) {
+        this.variable = variable;
 
         //bins
         //number of bins after Scott
-        double binWidthScott = (3.49 * data.getDataContent().get(index).getSdtDev()) / Math.pow(data.getDataContent().get(index).getVariableContent().size(), (1 / 3));
-        double numberOfBinsScott = Math.ceil((data.getDataContent().get(index).getRange()) / binWidthScott);
+        double binWidthScott = (3.49 * variable.getSdtDev()) / Math.pow(variable.getVariableContent().size(), (1 / 3));
+        double numberOfBinsScott = Math.ceil((variable.getRange()) / binWidthScott);
 
         //number if bins after Sturges' formula
-        int numberOfBinsSturges = (int) Math.ceil((Math.log(data.getDataContent().get(index).getVariableContent().size() / Math.log(2))));
+        int numberOfBinsSturges = (int) Math.ceil((Math.log(variable.getVariableContent().size() / Math.log(2))));
         //number of bins simple
-        int numberOfBinsSimple = (int) Math.sqrt(data.getDataContent().get(index).getVariableContent().size());
+        int numberOfBinsSimple = (int) Math.sqrt(variable.getVariableContent().size());
         if (numberOfBinsSimple > 30) numberOfBinsSimple = 30;
 
         numberOfBins = numberOfBinsSturges;
 
-        double classWidth;
-        if (data.getDataContent().get(index).getMinValue() < 0) {
-            classWidth = ((data.getDataContent().get(index).getMaxValue() + Math.abs(data.getDataContent().get(index).getMinValue())) / numberOfBins);
-        } else {
-            classWidth = (data.getDataContent().get(index).getRange() / numberOfBins);
-        }
-
         bins = new ArrayList<>(numberOfBins);
-        while (bins.size() <= numberOfBins) bins.add(0);
-        for (int i = 0; i < data.getDataContent().get(index).getVariableContent().size(); i++) {
+        while (bins.size() < numberOfBins) bins.add(new AtomicInteger());
+        System.out.println("Number of Bins" + numberOfBins);
+        ArrayList<Double> variableValues = variable.getVariableContent();
+        for (Double value : variableValues) {
 
-            if (data.getDataContent().get(index).getVariableContent().get(i) < 0) {
-                double val = Math.abs(data.getDataContent().get(index).getVariableContent().get(i));
-                val = val / classWidth;
-                int value = bins.get((int) val);
-                value++;
-                bins.set((int) val, value);//umgedreht
+            double normValue = ((value - variable.getMinValue()) / variable.getRange());
+            double normBinWidth = 1.0 / numberOfBins;
+
+            int binIndex = (int) (normValue / normBinWidth);
+            binIndex = Math.min(binIndex, numberOfBins - 1);
+
+            bins.get(binIndex).incrementAndGet();
+        }
+
+        maxValue = Collections.max(bins, new Comparator<AtomicInteger>() {
+            @Override
+            public int compare(AtomicInteger o1, AtomicInteger o2) {
+                return o1.get() - o2.get();
             }
-            int value = bins.get((int) (data.getDataContent().get(index).getVariableContent().get(i) / classWidth) - 1);
-            value++;
-            bins.set((int) (data.getDataContent().get(index).getVariableContent().get(i) / classWidth - 1), value);
-        }
-        for (int i = 0; i < bins.size(); i++) {
-        }
+        }).intValue();
+
+        System.out.println(maxValue);
     }
 
-    public ArrayList getBins() {
+    public List<AtomicInteger> getBins() {
         return bins;
     }
 
-    public double getMaxValue() {
-        return Collections.max(bins);
+    public int getMaxValue() {
+        return maxValue;
     }
 
     public String getVariableName() {
-        return data.getDataContent().get(index).getVariableName();
+        return variable.getVariableName();
     }
 
-    public int geNumberOfValues() {
-        return data.getDataContent().get(0).getVariableContent().size();
-    }
 }

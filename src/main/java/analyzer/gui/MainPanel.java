@@ -63,8 +63,8 @@ public class MainPanel extends JPanel {
                     }
                     variableTwoSelect.setSelectedIndex(1);
                     firstSplit.setTopComponent(new ScatterPlot(data));
-                    HistogramData leftHistogram = new HistogramData(data, leftIndex);
-                    HistogramData rightHistogram = new HistogramData(data, rightIndex);
+                    HistogramData leftHistogram = new HistogramData(data.getDataContent().get(leftIndex));
+                    HistogramData rightHistogram = new HistogramData(data.getDataContent().get(rightIndex));
                     secondSplit.setLeftComponent(new Histogram(leftHistogram));
                     secondSplit.setRightComponent(new Histogram(rightHistogram));
                     centerPanel.remove(fileChooser);
@@ -238,7 +238,8 @@ public class MainPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 leftIndex = variableSelect.getSelectedIndex();
-                //             secondSplit.setLeftComponent(new Histogram(data, leftIndex));
+                HistogramData leftHistogram = new HistogramData(data.getDataContent().get(leftIndex));
+                secondSplit.setLeftComponent(new Histogram(leftHistogram));
             }
         });
 
@@ -246,7 +247,8 @@ public class MainPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 rightIndex = variableTwoSelect.getSelectedIndex();
-                //            secondSplit.setRightComponent(new Histogram(data, rightIndex));
+                HistogramData rightHistogram = new HistogramData(data.getDataContent().get(rightIndex));
+                secondSplit.setRightComponent(new Histogram(rightHistogram));
             }
         });
 

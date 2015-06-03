@@ -24,15 +24,15 @@ public class Histogram extends JPanel {
 
 
             int barWidth = getWidth() / data.getBins().size();
-            double barHeight = ((int) data.getBins().get(i) / data.getMaxValue()) * getHeight();
+            int barHeight = (int) ((data.getBins().get(i).get() / (double) data.getMaxValue()) * getHeight());
 
             int x = (i) * (barWidth);
-            int y = getHeight() - (int) barHeight;
+            int y = getHeight() - barHeight;
 
             g.setColor(Color.GRAY);
-            g.fillRect(x, y, barWidth, (int) barHeight);
+            g.fillRect(x, y, barWidth, barHeight);
             g.setColor(Color.BLACK);
-            g.drawRect(x, y, barWidth, (int) barHeight);
+            g.drawRect(x, y, barWidth, barHeight);
         }
     }
 }
