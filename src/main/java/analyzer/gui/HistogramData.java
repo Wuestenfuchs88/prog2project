@@ -35,7 +35,7 @@ public class HistogramData {
 
         bins = new ArrayList<>(numberOfBins);
         while (bins.size() < numberOfBins) bins.add(new AtomicInteger());
-        System.out.println("Number of Bins" + numberOfBins);
+
         ArrayList<Double> variableValues = variable.getVariableContent();
         for (Double value : variableValues) {
 
@@ -55,7 +55,6 @@ public class HistogramData {
             }
         }).intValue();
 
-        System.out.println(maxValue);
     }
 
     public List<AtomicInteger> getBins() {

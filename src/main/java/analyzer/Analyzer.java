@@ -10,6 +10,8 @@ public class Analyzer {
 
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
+                //   JFileChooser fc = new JFileChooser();
+                //   fc.showOpenDialog(null);
                 new MainFrame().setVisible(true);
             }
         });

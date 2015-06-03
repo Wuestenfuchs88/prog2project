@@ -22,9 +22,8 @@ public class Histogram extends JPanel {
 
         for (int i = 0; i < data.getBins().size(); i++) {
 
-
             int barWidth = getWidth() / data.getBins().size();
-            int barHeight = (int) ((data.getBins().get(i).get() / (double) data.getMaxValue()) * getHeight());
+            int barHeight = (int) (((double) data.getBins().get(i).get() / (double) data.getMaxValue()) * getHeight());
 
             int x = (i) * (barWidth);
             int y = getHeight() - barHeight;

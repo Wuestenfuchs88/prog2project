@@ -12,6 +12,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 public class MainPanel extends JPanel {
 
@@ -21,7 +23,8 @@ public class MainPanel extends JPanel {
     private JComboBox variableTwoSelect;
     private JComboBox variableSelect;
     private JComboBox scaleDropdown;
-    private int leftIndex = 0, rightIndex = 1;
+    private int xIndex = 0, yIndex = 1;
+    private ScatterPlot scatterPlot;
 
     public MainPanel() {
 
@@ -62,9 +65,11 @@ public class MainPanel extends JPanel {
                         }
                     }
                     variableTwoSelect.setSelectedIndex(1);
-                    firstSplit.setTopComponent(new ScatterPlot(data));
-                    HistogramData leftHistogram = new HistogramData(data.getDataContent().get(leftIndex));
-                    HistogramData rightHistogram = new HistogramData(data.getDataContent().get(rightIndex));
+
+                    scatterPlot = new ScatterPlot(data, xIndex, yIndex);
+                    firstSplit.setTopComponent(scatterPlot);
+                    HistogramData leftHistogram = new HistogramData(data.getDataContent().get(xIndex));
+                    HistogramData rightHistogram = new HistogramData(data.getDataContent().get(yIndex));
                     secondSplit.setLeftComponent(new Histogram(leftHistogram));
                     secondSplit.setRightComponent(new Histogram(rightHistogram));
                     centerPanel.remove(fileChooser);
@@ -93,9 +98,8 @@ public class MainPanel extends JPanel {
         scatterPlotOptionsPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.DARK_GRAY), "Scatterplot"));
         scatterPlotOptionsPanel.setBackground(Color.LIGHT_GRAY);
 
-        JSlider pointSize = new JSlider(JSlider.HORIZONTAL,
-                0, 30, 5);
-
+        final JSlider pointSize = new JSlider(JSlider.HORIZONTAL, 0, 30, 5);
+        pointSize.setValue(5);
         pointSize.setMajorTickSpacing(10);
         pointSize.setMinorTickSpacing(1);
         pointSize.setPaintTicks(true);
@@ -103,6 +107,8 @@ public class MainPanel extends JPanel {
         pointSize.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY), "Set pointsize manually"));
 
         JCheckBox pointSizeFromVariable = new JCheckBox();
+        JCheckBox toggleLines = new JCheckBox();
+        toggleLines.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.DARK_GRAY), "Draw Lines"));
 
         scaleDropdown = new JComboBox();
         scaleDropdown.setEnabled(false);
@@ -118,7 +124,7 @@ public class MainPanel extends JPanel {
         JRadioButton red = new JRadioButton("Red");
         JRadioButton gray = new JRadioButton("Gray");
         JRadioButton green = new JRadioButton("Green");
-        JRadioButton white = new JRadioButton("White");
+        JRadioButton black = new JRadioButton("Black");
         JRadioButton blue = new JRadioButton("Blue");
 
         ButtonGroup buttonGroup = new ButtonGroup();
@@ -126,7 +132,7 @@ public class MainPanel extends JPanel {
         buttonGroup.add(red);
         buttonGroup.add(gray);
         buttonGroup.add(green);
-        buttonGroup.add(white);
+        buttonGroup.add(black);
         buttonGroup.add(blue);
 
         JPanel radioPanel = new JPanel(new GridLayout(3, 2));
@@ -134,7 +140,7 @@ public class MainPanel extends JPanel {
         radioPanel.add(red);
         radioPanel.add(gray);
         radioPanel.add(green);
-        radioPanel.add(white);
+        radioPanel.add(black);
         radioPanel.add(blue);
 
         radioPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.DARK_GRAY), "Color"));
@@ -144,6 +150,7 @@ public class MainPanel extends JPanel {
         scatterPlotOptionsPanel.add(pointSizePanel);
         scatterPlotOptionsPanel.add(pointSize);
         scatterPlotOptionsPanel.add(radioPanel);
+        scatterPlotOptionsPanel.add(toggleLines);
 
 
         JPanel histogramOptionsPanel = new JPanel(new GridLayout(2, 2));
@@ -181,7 +188,18 @@ public class MainPanel extends JPanel {
         pointSize.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
-                //set pointsize
+                scatterPlot.setPointSize(pointSize.getValue());
+            }
+        });
+
+        toggleLines.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    scatterPlot.setDrawLines(true);
+                } else {
+                    scatterPlot.setDrawLines(false);
+                }
             }
         });
 
@@ -196,6 +214,7 @@ public class MainPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 color = Color.RED;
+                scatterPlot.setColor(color);
                 repaint();
             }
         });
@@ -203,6 +222,7 @@ public class MainPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 color = Color.LIGHT_GRAY;
+                scatterPlot.setColor(color);
                 repaint();
             }
         });
@@ -210,13 +230,15 @@ public class MainPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 color = Color.GREEN;
+                scatterPlot.setColor(color);
                 repaint();
             }
         });
-        white.addActionListener(new ActionListener() {
+        black.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                color = Color.WHITE;
+                color = Color.BLACK;
+                scatterPlot.setColor(color);
                 repaint();
             }
         });
@@ -224,6 +246,7 @@ public class MainPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 color = Color.ORANGE;
+                scatterPlot.setColor(color);
                 repaint();
             }
         });
@@ -237,18 +260,25 @@ public class MainPanel extends JPanel {
         variableSelect.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                leftIndex = variableSelect.getSelectedIndex();
-                HistogramData leftHistogram = new HistogramData(data.getDataContent().get(leftIndex));
+                xIndex = variableSelect.getSelectedIndex();
+                HistogramData leftHistogram = new HistogramData(data.getDataContent().get(xIndex));
                 secondSplit.setLeftComponent(new Histogram(leftHistogram));
+                //        scatterPlot.setXIndex(xIndex);   <- so müsste man geht aber nicht??
+                scatterPlot = new ScatterPlot(data, xIndex, yIndex);
+                firstSplit.setTopComponent(scatterPlot);
+
             }
         });
 
         variableTwoSelect.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                rightIndex = variableTwoSelect.getSelectedIndex();
-                HistogramData rightHistogram = new HistogramData(data.getDataContent().get(rightIndex));
+                yIndex = variableTwoSelect.getSelectedIndex();
+                HistogramData rightHistogram = new HistogramData(data.getDataContent().get(yIndex));
                 secondSplit.setRightComponent(new Histogram(rightHistogram));
+                //       scatterPlot.setYIndex(yIndex);
+                scatterPlot = new ScatterPlot(data, xIndex, yIndex);
+                firstSplit.setTopComponent(scatterPlot);
             }
         });
 
