@@ -1,33 +1,27 @@
 package analyzer.gui;
 
 import analyzer.datastore.Data;
-
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
 
 
 public class ScatterPlot extends JPanel {
 
     private final Data data;
     private Color color = Color.ORANGE;
-    private ArrayList<Double> xCoordinates;
-    private ArrayList<Double> yCoordinates;
-    private double xValue;
-    private double yValue;
-    private double xCoordinate;
-    private double yCoordinate;
     private int xIndex;
     private int yIndex;
+    private int zIndex;
     private boolean drawLines = false;
     private int pointSize = 5;
 
 
-    public ScatterPlot(Data data, int xIndex, int yIndex) {
+    public ScatterPlot(Data data, int xIndex, int yIndex, int zIndex) {
 
         this.data = data;
         this.xIndex = xIndex;
         this.yIndex = yIndex;
+        this.zIndex = zIndex;
         setBackground(Color.WHITE);
 
     }
@@ -42,6 +36,16 @@ public class ScatterPlot extends JPanel {
         g2.setColor(color);
 
         for (int i = 0; i < data.getDataContent().get(xIndex).getVariableContent().size(); i++) {
+            if (data.getNumberOfVariables() > 2) {
+                xSize = ((int) (((data.getDataContent().get(zIndex).getVariableContent().get(i) -
+                        data.getDataContent().get(zIndex).getMinValue())
+                        / data.getDataContent().get(zIndex).getRange()) * pointSize));
+
+                ySize = ((int) (((data.getDataContent().get(zIndex).getVariableContent().get(i) -
+                        data.getDataContent().get(zIndex).getMinValue())
+                        / data.getDataContent().get(zIndex).getRange()) * pointSize));
+            }
+
             g2.fillOval(((int) ((((data.getDataContent().get(xIndex).getVariableContent().get(i) -
                     data.getDataContent().get(xIndex).getMinValue()) / data.getDataContent().get(xIndex).getRange())
                     * (getWidth() - 2))))
@@ -73,6 +77,11 @@ public class ScatterPlot extends JPanel {
 
     public void setYIndex(int yIndex) {
         this.yIndex = yIndex;
+        repaint();
+    }
+
+    public void setZIndex(int zIndex) {
+        this.zIndex = zIndex;
         repaint();
     }
 

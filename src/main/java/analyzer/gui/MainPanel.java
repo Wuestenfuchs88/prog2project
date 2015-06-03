@@ -23,7 +23,7 @@ public class MainPanel extends JPanel {
     private JComboBox variableTwoSelect;
     private JComboBox variableSelect;
     private JComboBox scaleDropdown;
-    private int xIndex = 0, yIndex = 1;
+    private int xIndex = 0, yIndex = 1, zIndex = 0;
     private ScatterPlot scatterPlot;
 
     public MainPanel() {
@@ -59,14 +59,14 @@ public class MainPanel extends JPanel {
                     for (int i = 0; i < data.getNumberOfVariables(); i++) {
                         variableSelect.addItem(data.getDataContent().get(i).getVariableName());
                         variableTwoSelect.addItem(data.getDataContent().get(i).getVariableName());
-                        if (i >= 3) {
+                        if (i >= 2) {
                             scaleDropdown.addItem(data.getDataContent().get(i).getVariableName());
                             scaleDropdown.setEnabled(true);
                         }
                     }
                     variableTwoSelect.setSelectedIndex(1);
 
-                    scatterPlot = new ScatterPlot(data, xIndex, yIndex);
+                    scatterPlot = new ScatterPlot(data, xIndex, yIndex, zIndex);
                     firstSplit.setTopComponent(scatterPlot);
                     HistogramData leftHistogram = new HistogramData(data.getDataContent().get(xIndex));
                     HistogramData rightHistogram = new HistogramData(data.getDataContent().get(yIndex));
@@ -207,7 +207,8 @@ public class MainPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 color = Color.BLUE;
-
+                scatterPlot.setColor(color);
+                repaint();
             }
         });
         red.addActionListener(new ActionListener() {
@@ -253,7 +254,9 @@ public class MainPanel extends JPanel {
         scaleDropdown.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //machwas
+                zIndex = scaleDropdown.getSelectedIndex();
+                scatterPlot = new ScatterPlot(data, xIndex, yIndex, zIndex);
+                firstSplit.setTopComponent(scatterPlot);
             }
         });
 
@@ -264,7 +267,7 @@ public class MainPanel extends JPanel {
                 HistogramData leftHistogram = new HistogramData(data.getDataContent().get(xIndex));
                 secondSplit.setLeftComponent(new Histogram(leftHistogram));
                 //        scatterPlot.setXIndex(xIndex);   <- so müsste man geht aber nicht??
-                scatterPlot = new ScatterPlot(data, xIndex, yIndex);
+                scatterPlot = new ScatterPlot(data, xIndex, yIndex, zIndex);
                 firstSplit.setTopComponent(scatterPlot);
 
             }
@@ -277,7 +280,7 @@ public class MainPanel extends JPanel {
                 HistogramData rightHistogram = new HistogramData(data.getDataContent().get(yIndex));
                 secondSplit.setRightComponent(new Histogram(rightHistogram));
                 //       scatterPlot.setYIndex(yIndex);
-                scatterPlot = new ScatterPlot(data, xIndex, yIndex);
+                scatterPlot = new ScatterPlot(data, xIndex, yIndex, zIndex);
                 firstSplit.setTopComponent(scatterPlot);
             }
         });
