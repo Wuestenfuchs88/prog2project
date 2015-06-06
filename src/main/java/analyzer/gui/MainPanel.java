@@ -109,9 +109,9 @@ public class MainPanel extends JPanel {
         variableOptionsPanel.setBackground(Color.LIGHT_GRAY);
 
         variableSelect = new JComboBox<>();
-        variableSelect.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY), "X-Variable / Left Histogram"));
+        variableSelect.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY), "X-Axis / Left Histogram"));
         variableTwoSelect = new JComboBox<>();
-        variableTwoSelect.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY), "Y-Variable / Right Histogram"));
+        variableTwoSelect.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY), "Y-Axis / Right Histogram"));
         variableThreeSelect = new JComboBox<>();
         variableThreeSelect.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY), "Z-Variable / Weight"));
         variableThreeSelect.setEnabled(false);
