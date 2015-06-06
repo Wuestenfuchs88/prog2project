@@ -40,8 +40,6 @@ public class TabDelimitedReader implements ReaderLoader {
 
         tabDelimitedScanner.close();
 
-        System.out.println("TabDelimitedReader finished parsing file" + fileName);
-
         return new Data(numberOfVariables, variables, fileName);
     }
 }

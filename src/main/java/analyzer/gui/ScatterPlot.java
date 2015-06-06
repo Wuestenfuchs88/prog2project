@@ -1,20 +1,16 @@
 package analyzer.gui;
 
 import analyzer.datastore.Data;
+
 import javax.swing.*;
 import java.awt.*;
-
 
 public class ScatterPlot extends JPanel {
 
     private final Data data;
-    private Color color = Color.ORANGE;
-    private int xIndex;
-    private int yIndex;
-    private int zIndex;
-    private boolean drawLines = false;
-    private int pointSize = 5;
-
+    private Color color = Color.DARK_GRAY;
+    private int xIndex, yIndex, zIndex, pointSize = 5;
+    private boolean drawLines = false, pointWeight = false;
 
     public ScatterPlot(Data data, int xIndex, int yIndex, int zIndex) {
 
@@ -23,11 +19,11 @@ public class ScatterPlot extends JPanel {
         this.yIndex = yIndex;
         this.zIndex = zIndex;
         setBackground(Color.WHITE);
-
     }
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+
         int xSize = pointSize;
         int ySize = pointSize;
 
@@ -36,7 +32,7 @@ public class ScatterPlot extends JPanel {
         g2.setColor(color);
 
         for (int i = 0; i < data.getDataContent().get(xIndex).getVariableContent().size(); i++) {
-            if (data.getNumberOfVariables() > 2) {
+            if (pointWeight) {
                 xSize = ((int) (((data.getDataContent().get(zIndex).getVariableContent().get(i) -
                         data.getDataContent().get(zIndex).getMinValue())
                         / data.getDataContent().get(zIndex).getRange()) * pointSize));
@@ -53,10 +49,9 @@ public class ScatterPlot extends JPanel {
                     - data.getDataContent().get(yIndex).getMinValue())
                     / data.getDataContent().get(yIndex).getRange()) * (getHeight() - 2)))))
                     , xSize, ySize);
-
         }
 
-        if (drawLines == true) {
+        if (drawLines) {
             for (int i = 0; i < data.getDataContent().get(xIndex).getVariableContent().size() - 1; i++) {
                 g2.drawLine(((int) ((((data.getDataContent().get(xIndex).getVariableContent().get(i) -
                                 data.getDataContent().get(xIndex).getMinValue()) / data.getDataContent().get(xIndex).getRange()) * (getWidth() - 2)))),
@@ -97,6 +92,11 @@ public class ScatterPlot extends JPanel {
 
     public void setPointSize(int pointSize) {
         this.pointSize = pointSize;
+        repaint();
+    }
+
+    public void setPointWeight(boolean pointWeight) {
+        this.pointWeight = pointWeight;
         repaint();
     }
 }

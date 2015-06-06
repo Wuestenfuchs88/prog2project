@@ -4,9 +4,9 @@ import java.util.List;
 
 public class Data {
 
-    private int numberOfVariables;
-    private List<Variable> variables;
-    private String fileName;
+    private final int numberOfVariables;
+    private final List<Variable> variables;
+    private final String fileName;
 
     public Data(int numberOfVariables, List<Variable> variables, String fileName) {
         this.numberOfVariables = numberOfVariables;

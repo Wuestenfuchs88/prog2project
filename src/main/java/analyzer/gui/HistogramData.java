@@ -1,6 +1,5 @@
 package analyzer.gui;
 
-
 import analyzer.datastore.Variable;
 
 import java.util.ArrayList;
@@ -11,27 +10,18 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class HistogramData {
 
-    private final ArrayList<AtomicInteger> bins;
-    private final int numberOfBins;
-    private final int maxValue;
     private final Variable variable;
+    private final ArrayList<AtomicInteger> bins;
+    private final int maxValue;
 
 
     public HistogramData(Variable variable) {
+
         this.variable = variable;
 
-        //bins
-        //number of bins after Scott
-        double binWidthScott = (3.49 * variable.getSdtDev()) / Math.pow(variable.getVariableContent().size(), (1 / 3));
-        double numberOfBinsScott = Math.ceil((variable.getRange()) / binWidthScott);
+        int numberOfBins = (int) Math.sqrt(variable.getVariableContent().size());
+        if (numberOfBins > 50) numberOfBins = 50;
 
-        //number if bins after Sturges' formula
-        int numberOfBinsSturges = (int) Math.ceil((Math.log(variable.getVariableContent().size() / Math.log(2))));
-        //number of bins simple
-        int numberOfBinsSimple = (int) Math.sqrt(variable.getVariableContent().size());
-        if (numberOfBinsSimple > 30) numberOfBinsSimple = 30;
-
-        numberOfBins = numberOfBinsSturges;
 
         bins = new ArrayList<>(numberOfBins);
         while (bins.size() < numberOfBins) bins.add(new AtomicInteger());

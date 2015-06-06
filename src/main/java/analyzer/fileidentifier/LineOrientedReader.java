@@ -38,12 +38,10 @@ public class LineOrientedReader implements ReaderLoader {
 
         for (int i = 0; i < numberOfVariables; i++) {
             String[] values = lineOrientedScanner.nextLine().split(delimiter);
-            for (int j = 0; j < values.length; j++) variables.get(i).addValue(Double.parseDouble(values[j]));
+            for (String value : values) variables.get(i).addValue(Double.parseDouble(value));
         }
 
         lineOrientedScanner.close();
-
-        System.out.println("LineOrientedReader finished parsing file" + fileName);
 
         return new Data(numberOfVariables, variables, fileName);
     }
