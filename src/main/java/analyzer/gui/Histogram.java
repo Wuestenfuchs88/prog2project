@@ -10,10 +10,8 @@ public class Histogram extends JPanel {
     public Histogram(HistogramData data) {
 
         this.data = data;
-
         setBackground(Color.WHITE);
-        setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY), data.getVariableName()));
-
+        setBorder(BorderFactory.createTitledBorder(data.getVariableName()));
     }
 
     @Override
@@ -22,11 +20,11 @@ public class Histogram extends JPanel {
 
         for (int i = 0; i < data.getBins().size(); i++) {
 
-            int barWidth = getWidth() / data.getBins().size();
-            int barHeight = (int) (((double) data.getBins().get(i).get() / (double) data.getMaxValue()) * getHeight());
+            int barWidth = (int) ((getWidth() - (getInsets().left * 1.5)) / data.getBins().size());
+            int barHeight = (int) (((double) data.getBins().get(i).get() / (double) data.getMaxValue()) * (getHeight() - getInsets().top));
 
-            int x = (i) * (barWidth);
-            int y = getHeight() - barHeight;
+            int x = (i) * (barWidth) + getInsets().left;
+            int y = getHeight() - barHeight - getInsets().bottom;
 
             g.setColor(Color.GRAY);
             g.fillRect(x, y, barWidth, barHeight);
@@ -35,3 +33,4 @@ public class Histogram extends JPanel {
         }
     }
 }
+

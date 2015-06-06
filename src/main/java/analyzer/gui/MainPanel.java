@@ -15,7 +15,6 @@ public class MainPanel extends JPanel {
 
     private final JComboBox<String> variableSelect, variableTwoSelect, variableThreeSelect;
     private Color color = Color.BLACK;
-    private int xIndex = 0, yIndex = 1, zIndex = 0;
     private ScatterPlot scatterPlot;
 
     public MainPanel(final Data data) {
@@ -23,6 +22,7 @@ public class MainPanel extends JPanel {
         setLayout(new BorderLayout());
 
         //Center
+
         final JPanel centerPanel = new JPanel(new BorderLayout());
         final JSplitPane firstSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
         final JSplitPane secondSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
@@ -30,6 +30,7 @@ public class MainPanel extends JPanel {
         firstSplit.setResizeWeight(0.5);
         secondSplit.setResizeWeight(0.5);
 
+        final int xIndex = 0, yIndex = 1, zIndex = 0;
         scatterPlot = new ScatterPlot(data, xIndex, yIndex, zIndex);
         firstSplit.setTopComponent(scatterPlot);
         HistogramData leftHistogram = new HistogramData(data.getDataContent().get(xIndex));
@@ -38,6 +39,7 @@ public class MainPanel extends JPanel {
         secondSplit.setRightComponent(new Histogram(rightHistogram));
 
         centerPanel.add(firstSplit);
+
 
         //Top
 
@@ -114,7 +116,6 @@ public class MainPanel extends JPanel {
         variableThreeSelect.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY), "Z-Variable / Weight"));
         variableThreeSelect.setEnabled(false);
 
-
         for (int i = 0; i < data.getNumberOfVariables(); i++) {
             variableSelect.addItem(data.getDataContent().get(i).getVariableName());
             variableTwoSelect.addItem(data.getDataContent().get(i).getVariableName());
@@ -144,6 +145,7 @@ public class MainPanel extends JPanel {
 
 
         //ActionListeners
+
         pointSizeSlider.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
@@ -223,7 +225,7 @@ public class MainPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int setIndex = variableSelect.getSelectedIndex();
-                HistogramData leftHistogram = new HistogramData(data.getDataContent().get(xIndex));
+                HistogramData leftHistogram = new HistogramData(data.getDataContent().get(setIndex));
                 secondSplit.setLeftComponent(new Histogram(leftHistogram));
                 scatterPlot.setXIndex(setIndex);
             }
@@ -233,7 +235,7 @@ public class MainPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int setIndex = variableTwoSelect.getSelectedIndex();
-                HistogramData rightHistogram = new HistogramData(data.getDataContent().get(yIndex));
+                HistogramData rightHistogram = new HistogramData(data.getDataContent().get(setIndex));
                 secondSplit.setRightComponent(new Histogram(rightHistogram));
                 scatterPlot.setYIndex(setIndex);
             }
