@@ -23,22 +23,29 @@ public class TabDelimitedReader implements ReaderLoader {
             System.err.println("File not found or format is unknown!");
         }
 
-        String firstLine = tabDelimitedScanner.nextLine();
-        int numberOfVariables = firstLine.split("\\t").length;
+        String firstLine;
+        int numberOfVariables = 0;
+        List<Variable> variables = null;
+        if (tabDelimitedScanner != null) {
+            firstLine = tabDelimitedScanner.nextLine();
 
-        List<Variable> variables = new ArrayList<>(numberOfVariables);
-        String[] variableName = firstLine.split("\\t");
-        for (int i = 0; i < numberOfVariables; i++) {
-            Variable variable = new Variable(variableName[i]);
-            variables.add(variable);
-        }
+            numberOfVariables = firstLine.split("\\t").length;
 
-        while (tabDelimitedScanner.hasNextLine()) {
-            String[] currentLine = tabDelimitedScanner.nextLine().split("\\t");
-            for (int i = 0; i < numberOfVariables; i++) variables.get(i).addValue(Double.parseDouble(currentLine[i]));
-        }
+            variables = new ArrayList<>(numberOfVariables);
+            String[] variableName = firstLine.split("\\t");
+            for (int i = 0; i < numberOfVariables; i++) {
+                Variable variable = new Variable(variableName[i]);
+                variables.add(variable);
+            }
 
-        tabDelimitedScanner.close();
+            while (tabDelimitedScanner.hasNextLine()) {
+                String[] currentLine = tabDelimitedScanner.nextLine().split("\\t");
+                for (int i = 0; i < numberOfVariables; i++)
+                    variables.get(i).addValue(Double.parseDouble(currentLine[i]));
+            }
+
+            tabDelimitedScanner.close();
+        } else System.out.println("Analyzer encountered a problem while parsing the selected file.");
 
         return new Data(numberOfVariables, variables, fileName);
     }
