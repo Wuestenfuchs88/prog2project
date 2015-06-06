@@ -1,7 +1,6 @@
 package analyzer.gui;
 
 import analyzer.datastore.Data;
-
 import javax.swing.*;
 import java.awt.*;
 
@@ -19,6 +18,7 @@ public class ScatterPlot extends JPanel {
         this.yIndex = yIndex;
         this.zIndex = zIndex;
         setBackground(Color.WHITE);
+        //setBorder(BorderFactory.createTitledBorder(data.()));
     }
     @Override
     protected void paintComponent(Graphics g) {
@@ -44,23 +44,27 @@ public class ScatterPlot extends JPanel {
 
             g2.fillOval(((int) ((((data.getDataContent().get(xIndex).getVariableContent().get(i) -
                     data.getDataContent().get(xIndex).getMinValue()) / data.getDataContent().get(xIndex).getRange())
-                    * (getWidth() - 2))))
+                    * (getWidth() - getInsets().left)))) - (pointSize / 2)
                     , ((int) (getHeight() - ((((data.getDataContent().get(yIndex).getVariableContent().get(i)
                     - data.getDataContent().get(yIndex).getMinValue())
-                    / data.getDataContent().get(yIndex).getRange()) * (getHeight() - 2)))))
+                    / data.getDataContent().get(yIndex).getRange()) * (getHeight() - getInsets().top))))) - (pointSize / 2)
                     , xSize, ySize);
         }
 
         if (drawLines) {
             for (int i = 0; i < data.getDataContent().get(xIndex).getVariableContent().size() - 1; i++) {
                 g2.drawLine(((int) ((((data.getDataContent().get(xIndex).getVariableContent().get(i) -
-                                data.getDataContent().get(xIndex).getMinValue()) / data.getDataContent().get(xIndex).getRange()) * (getWidth() - 2)))),
-                        ((int) ((getHeight() - (((data.getDataContent().get(yIndex).getVariableContent().get(i) - data.getDataContent().get(yIndex).getMinValue())
-                                / data.getDataContent().get(yIndex).getRange()) * (getHeight() - 2))))),
+                                data.getDataContent().get(xIndex).getMinValue())
+                                / data.getDataContent().get(xIndex).getRange()) * (getWidth() - getInsets().left)))),
+                        ((int) ((getHeight() - (((data.getDataContent().get(yIndex).getVariableContent().get(i)
+                                - data.getDataContent().get(yIndex).getMinValue())
+                                / data.getDataContent().get(yIndex).getRange()) * (getHeight() - getInsets().top))))),
                         ((int) ((((data.getDataContent().get(xIndex).getVariableContent().get(i + 1)
-                                - data.getDataContent().get(xIndex).getMinValue()) / data.getDataContent().get(xIndex).getRange()) * (getWidth() - 2)))),
-                        ((int) ((getHeight() - ((data.getDataContent().get(yIndex).getVariableContent().get(i + 1) - data.getDataContent().get(yIndex).getMinValue())
-                                / data.getDataContent().get(yIndex).getRange()) * (getHeight() - 2)))));
+                                - data.getDataContent().get(xIndex).getMinValue())
+                                / data.getDataContent().get(xIndex).getRange()) * (getWidth() - getInsets().left)))),
+                        ((int) ((getHeight() - ((data.getDataContent().get(yIndex).getVariableContent().get(i + 1)
+                                - data.getDataContent().get(yIndex).getMinValue())
+                                / data.getDataContent().get(yIndex).getRange()) * (getHeight() - getInsets().top)))));
             }
         }
     }
