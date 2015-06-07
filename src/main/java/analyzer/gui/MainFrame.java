@@ -6,7 +6,7 @@ import javax.swing.*;
 
 public class MainFrame extends JFrame {
 
-    private static final int FRAME_WIDTH = 1000;
+    private static final int FRAME_WIDTH = 1100;
     private static final int FRAME_HEIGHT = 700;
 
     public MainFrame(Data data) {

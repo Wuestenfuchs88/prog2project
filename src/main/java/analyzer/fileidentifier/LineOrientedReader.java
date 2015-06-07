@@ -11,6 +11,7 @@ import java.util.Scanner;
 
 public class LineOrientedReader implements ReaderLoader {
 
+
     @Override
     public Data loadData(File chosenFile) {
 
@@ -25,7 +26,7 @@ public class LineOrientedReader implements ReaderLoader {
 
         int numberOfVariables = 0;
         List<Variable> variables = null;
-        if (lineOrientedScanner != null) {
+        try {
             numberOfVariables = Integer.parseInt(lineOrientedScanner.nextLine());
 
             variables = new ArrayList<>(numberOfVariables);
@@ -44,7 +45,10 @@ public class LineOrientedReader implements ReaderLoader {
             }
 
             lineOrientedScanner.close();
-        } else System.out.println("Analyzer encountered a problem while parsing the selected file.");
+        } catch (Exception e) {
+            System.err.println("Analyzer encountered a problem parsing input, please check your file.");
+            System.exit(0);
+        }
 
         return new Data(numberOfVariables, variables, fileName);
     }

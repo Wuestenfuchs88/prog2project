@@ -23,11 +23,10 @@ public class TabDelimitedReader implements ReaderLoader {
             System.err.println("File not found or format is unknown!");
         }
 
-        String firstLine;
         int numberOfVariables = 0;
         List<Variable> variables = null;
-        if (tabDelimitedScanner != null) {
-            firstLine = tabDelimitedScanner.nextLine();
+        try {
+            String firstLine = tabDelimitedScanner.nextLine();
 
             numberOfVariables = firstLine.split("\\t").length;
 
@@ -45,7 +44,10 @@ public class TabDelimitedReader implements ReaderLoader {
             }
 
             tabDelimitedScanner.close();
-        } else System.out.println("Analyzer encountered a problem while parsing the selected file.");
+        } catch (Exception e) {
+            System.err.println("Analyzer encountered a problem parsing input, please check your file.");
+            System.exit(0);
+        }
 
         return new Data(numberOfVariables, variables, fileName);
     }

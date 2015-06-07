@@ -31,24 +31,38 @@ public class ScatterPlot extends JPanel {
 
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2.setColor(color);
 
+        final int X_AXIS_START_X = 10;
+        final int X_AXIS_END_X = getWidth() - 80;
+        final int X_AXIS_Y = getHeight() - 10;
+        final int Y_AXIS_START_Y = getHeight() - 10;
+        final int Y_AXIS_END_Y = 20;
+        final int Y_AXIS_X = 10;
+        final int ARROW_ARM = 5;
+        final int ORIGIN_POINT_SIZE = 6;
+        final int X_AXIS_LABEL_X = getWidth() - 75;
+        final int X_AXIS_LABEL_Y = getHeight() - 5;
+        final int Y_AXIS_LABEL_X = 5;
+        final int Y_AXIS_LABEL_Y = 13;
+
+        g2.setColor(Color.DARK_GRAY);
         // x-axis
-        g2.drawLine(10, getHeight() - 10, getWidth() - 75, getHeight() - 10);
+        g2.drawLine(X_AXIS_START_X, X_AXIS_Y, X_AXIS_END_X, X_AXIS_Y);
         // y-axis
-        g2.drawLine(10, getHeight() - 10, 10, 20);
+        g2.drawLine(Y_AXIS_X, Y_AXIS_START_Y, Y_AXIS_X, Y_AXIS_END_Y);
         // x-axis arrow
-        g2.drawLine(getWidth() - 75 - 5, getHeight() - 10 - 5, getWidth() - 75, getHeight() - 10);
-        g2.drawLine(getWidth() - 75 - 5, getHeight() - 10 + 5, getWidth() - 75, getHeight() - 10);
+        g2.drawLine(X_AXIS_END_X - ARROW_ARM, X_AXIS_Y - ARROW_ARM, X_AXIS_END_X, X_AXIS_Y);
+        g2.drawLine(X_AXIS_END_X - ARROW_ARM, X_AXIS_Y + ARROW_ARM, X_AXIS_END_X, X_AXIS_Y);
         // y-axis arrow
-        g2.drawLine(10 - 5, 20 + 5, 10, 20);
-        g2.drawLine(10 + 5, 20 + 5, 10, 20);
+        g2.drawLine(Y_AXIS_X - ARROW_ARM, Y_AXIS_END_Y + ARROW_ARM, Y_AXIS_X, Y_AXIS_END_Y);
+        g2.drawLine(Y_AXIS_X + ARROW_ARM, Y_AXIS_END_Y + ARROW_ARM, Y_AXIS_X, Y_AXIS_END_Y);
         // draw origin Point
-        g2.fillOval(7, getHeight() - 13, 6, 6);
+        g2.fillOval(X_AXIS_START_X - (ORIGIN_POINT_SIZE / 2), X_AXIS_Y - (ORIGIN_POINT_SIZE / 2), ORIGIN_POINT_SIZE, ORIGIN_POINT_SIZE);
         // draw labels
-        g2.drawString(data.getDataContent().get(xIndex).getVariableName(), getWidth() - 70, getHeight() - 5);
-        g2.drawString(data.getDataContent().get(yIndex).getVariableName(), 5, 10);
+        g2.drawString(data.getDataContent().get(xIndex).getVariableName(), X_AXIS_LABEL_X, X_AXIS_LABEL_Y);
+        g2.drawString(data.getDataContent().get(yIndex).getVariableName(), Y_AXIS_LABEL_X, Y_AXIS_LABEL_Y);
 
+        g2.setColor(color);
         for (int i = 0; i < data.getDataContent().get(xIndex).getVariableContent().size(); i++) {
             if (pointWeight) {
                 xSize = ((int) (((data.getDataContent().get(zIndex).getVariableContent().get(i) -
